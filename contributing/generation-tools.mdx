@@ -1,0 +1,204 @@
+---
+title: "Generation tools and scripts reference for contributors"
+description: "Reference for every tool in the toolchain: gen.py, format converters, screenshot generation, and Docker or local full-regeneration workflows."
+---
+
+The repository ships several Python scripts and shell scripts that together handle the full lifecycle of a color scheme: converting source YAML or `.itermcolors` files into every supported terminal format, generating screenshots, and importing schemes directly into iTerm2. Most contributors will only need `gen.py` for day-to-day work; the sections below cover all available tools.
+
+## Prerequisites
+
+Before running any tool locally, set up the Python environment:
+
+<Steps>
+  <Step title="Install pyenv">
+    The project recommends [pyenv](https://github.com/pyenv/pyenv) for managing the Python version. Install it following the instructions in its README.
+  </Step>
+
+  <Step title="Install the required Python version">
+    Run the following from the repository root. The required version is read from `.python-version`:
+
+    ```bash
+    pyenv install
+    ```
+  </Step>
+
+  <Step title="Install Python dependencies">
+    ```bash
+    pip install -r requirements.txt
+    ```
+  </Step>
+</Steps>
+
+---
+
+## tools/gen.py
+
+`gen.py` is the primary generation script. It reads source files from `yaml/` (and `schemes/` for themes without a YAML override) and renders every template in `tools/templates/`, producing one output file per scheme per template.
+
+```
+usage: gen.py [-h] [-s [SCHEME [SCHEME ...]]] [-t [TEMPLATE [TEMPLATE ...]]]
+
+A script for generating themes based on a set of schemes and templates.
+If run with no arguments, everything will be re-generated.
+
+optional arguments:
+  -h, --help            show this help message and exit
+  -s [SCHEME [SCHEME ...]], --scheme [SCHEME [SCHEME ...]]
+                        list of schemes for which themes will be generated, default: all
+  -t [TEMPLATE [TEMPLATE ...]], --template [TEMPLATE [TEMPLATE ...]]
+                        list of templates for which themes will be generated, default: all
+```
+
+**Common commands**
+
+```bash
+# Regenerate everything
+cd tools/ && python gen.py
+
+# Generate all output formats for a single scheme
+python3 tools/gen.py -s Dracula
+
+# Generate output for multiple schemes at once
+python3 tools/gen.py -s Dracula Nord Monokai
+
+# Generate output for one template across all schemes
+python3 tools/gen.py -t kitty
+
+# Generate output for a specific scheme + specific template combination
+python3 tools/gen.py -s Dracula -t windowsterminal
+```
+
+---
+
+## tools/kitty_to_yaml.py
+
+Converts a Kitty `.conf` color configuration into the YAML format used by this project. The script reads from standard input and writes the YAML fragment to standard output. It maps Kitty's `color0`–`color15`, `foreground`, `background`, `selection_foreground`, `selection_background`, `cursor`, and `cursor_text_color` keys to their YAML equivalents.
+
+```bash
+# Convert a Kitty config and write directly to yaml/
+python3 tools/kitty_to_yaml.py < path/to/theme.conf > yaml/YourThemeName.yml
+```
+
+Keys that do not map to a recognized YAML field are reported to stderr and skipped. Color values that do not start with `#` are also reported and skipped.
+
+---
+
+## tools/ghostty_to_yaml.py
+
+Converts a Ghostty configuration fragment into the YAML format used by this project. Like `kitty_to_yaml.py`, it reads from standard input and writes to standard output. It handles `palette = N=<hex>` entries for the 16 ANSI colors and maps named keys such as `background`, `foreground`, `cursor-color`, `cursor-text`, `selection-background`, and `selection-foreground`.
+
+```bash
+# Convert a Ghostty color config fragment and write to yaml/
+python3 tools/ghostty_to_yaml.py < path/to/ghostty-colors.conf > yaml/YourThemeName.yml
+```
+
+Unrecognized keys are reported to stderr and skipped.
+
+---
+
+## Full regeneration
+
+Use one of the two workflows below to regenerate all schemes for all templates. The Docker workflow is recommended if you do not want to install Python locally.
+
+<Tabs>
+  <Tab title="Docker (generate-all.sh)">
+    `generate-all.sh` builds a Docker image named `itermcolors:latest` (if it does not already exist) and runs the full generation pipeline inside a container. No local Python installation is required.
+
+    ```bash
+    # Regenerate everything
+    ./generate-all.sh
+    ```
+
+    The script runs the following commands inside the container:
+
+    ```bash
+    cd tools
+    ./gen.py
+    python -m screenshot_gen
+    python ./generate_screenshots_readme.py
+    ```
+
+    **Debug mode**
+
+    To open an interactive terminal inside the container instead of running the pipeline automatically:
+
+    ```bash
+    ./generate-all.sh debug
+    ```
+
+    The commands that would have been run automatically are printed to the terminal before the shell starts, so you can run or inspect them manually.
+
+    <Note>
+      The remaining manual tasks after running this script are to update `README.md` to include your theme's screenshot entry and to update `CREDITS.md`.
+    </Note>
+  </Tab>
+
+  <Tab title="No Docker (generate-all-nodocker.sh)">
+    `generate-all-nodocker.sh` creates a local virtual environment, installs dependencies, and runs the full generation pipeline without Docker.
+
+    ```bash
+    ./generate-all-nodocker.sh
+    ```
+
+    The script performs the following steps:
+
+    ```bash
+    [[ ! -d ".venv" ]] && python3 -m venv .venv
+    source .venv/bin/activate
+    pip install --upgrade pip
+    pip install -r requirements.txt
+    cd tools
+    python gen.py
+    python iterm2terminal.py ../schemes ../terminal
+    python -m screenshot_gen
+    python generate_screenshots_readme.py
+    ```
+  </Tab>
+</Tabs>
+
+---
+
+## tools/import-scheme.sh
+
+Imports `.itermcolors` files directly into iTerm2 by writing them into the iTerm2 preferences plist. This script is for macOS only.
+
+```bash
+# Import all color schemes
+tools/import-scheme.sh schemes/*
+
+# Import all color schemes with verbose output
+tools/import-scheme.sh -v schemes/*
+
+# Import a specific scheme by file path (quote names with spaces)
+tools/import-scheme.sh 'schemes/SpaceGray Eighties.itermcolors'
+
+# Import a specific scheme by name
+tools/import-scheme.sh 'SpaceGray Eighties'
+
+# Import multiple schemes
+tools/import-scheme.sh Molokai 'SpaceGray Eighties'
+```
+
+After running the script, restart iTerm2 to reload the preferences file.
+
+<Warning>
+  This script only works on macOS. Running it on any other platform will exit with a fatal error.
+</Warning>
+
+---
+
+## Makefile
+
+The `Makefile` provides a shorthand for the most common local workflow — regenerate all output, regenerate screenshots, and regenerate the screenshots section of `README.md`:
+
+```bash
+make
+```
+
+This is equivalent to running:
+
+```bash
+cd tools/ && python gen.py
+cd tools/ && python -m screenshot_gen
+cd tools/ && python generate_screenshots_readme.py
+```

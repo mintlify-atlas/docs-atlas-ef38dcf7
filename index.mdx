@@ -1,97 +1,64 @@
 ---
-title: "Introduction"
-description: "Welcome to the new home for your documentation"
+title: "iTerm2 Color Schemes: 485+ terminal themes for every app"
+description: "Browse and install over 485 terminal color schemes for iTerm2, with ports to Alacritty, Kitty, Ghostty, Windows Terminal, Konsole, and 15+ more terminals."
 ---
 
-## Setting up
+iTerm2 Color Schemes is a community-maintained collection of over 485 beautiful color themes for iTerm2, with automatic ports to more than 20 terminals and editors. Whether you prefer dark moody palettes like Dracula and Tokyo Night or bright themes like Alabaster and GitHub Light, there's a scheme ready to install in minutes.
 
-Get your documentation site up and running in minutes.
-
-<Card
-  title="Start here"
-  icon="rocket"
-  href="/quickstart"
-  horizontal
->
-  Follow our three step quickstart guide.
-</Card>
-
-## Make it yours
-
-Design a docs site that looks great and empowers your users.
-
-<Columns cols={2}>
-  <Card
-    title="Edit locally"
-    icon="pen-to-square"
-    href="/development"
-  >
-    Edit your docs locally and preview them in real time.
+<CardGroup cols={2}>
+  <Card title="Quick Start" icon="rocket" href="/quickstart">
+    Install your first color scheme in iTerm2 in under two minutes.
   </Card>
-  <Card
-    title="Customize your site"
-    icon="palette"
-    href="/essentials/settings"
-  >
-    Customize the design and colors of your site to match your brand.
+  <Card title="Browse All Schemes" icon="palette" href="/schemes/overview">
+    Explore the full library of 485+ dark and light themes.
   </Card>
-    <Card
-    title="Set up navigation"
-    icon="map"
-    href="/essentials/navigation"
-  >
-    Organize your docs to help users find what they need and succeed with your product.
+  <Card title="Terminal Ports" icon="terminal" href="/ports/overview">
+    Use your favorite scheme in Alacritty, Kitty, Ghostty, Windows Terminal, and more.
   </Card>
-  <Card
-    title="API documentation"
-    icon="terminal"
-    href="/api-reference/introduction"
-  >
-    Auto-generate API documentation from OpenAPI specifications.
+  <Card title="Contribute a Theme" icon="code-pull-request" href="/contributing/adding-a-theme">
+    Submit your own color scheme to the collection via Pull Request.
   </Card>
-</Columns>
+</CardGroup>
 
-## Create beautiful pages
+## What's included
 
-Everything you need to create world-class documentation.
+Each color scheme is available in the native `.itermcolors` format for iTerm2, and is automatically exported to a wide range of other terminals and editors using the project's Python-based generation tooling.
 
-<Columns cols={2}>
-  <Card
-    title="Write with MDX"
-    icon="pen-fancy"
-    href="/essentials/markdown"
-  >
-    Use MDX to style your docs pages.
+<CardGroup cols={2}>
+  <Card title="iTerm2 & macOS Terminal" icon="apple" href="/installation/iterm2">
+    Native `.itermcolors` files for iTerm2 and Mac Terminal `.terminal` bundles.
   </Card>
-  <Card
-    title="Code samples"
-    icon="code"
-    href="/essentials/code"
-  >
-    Add sample code to demonstrate how to use your product.
+  <Card title="Alacritty, Kitty & Ghostty" icon="bolt" href="/installation/other-terminals">
+    TOML and config-format themes for modern GPU-accelerated terminals.
   </Card>
-  <Card
-    title="Images"
-    icon="image"
-    href="/essentials/images"
-  >
-    Display images and other media.
+  <Card title="Windows Terminal" icon="windows" href="/installation/windows-terminal">
+    JSON fragments ready to paste into your Windows Terminal settings.
   </Card>
-  <Card
-    title="Reusable snippets"
-    icon="recycle"
-    href="/essentials/reusable-snippets"
-  >
-    Write once and reuse across your docs.
+  <Card title="Vim & VS Code" icon="code" href="/using/vim">
+    Vim colorscheme files and VS Code JSON theme exports.
   </Card>
-</Columns>
+</CardGroup>
 
-## Need inspiration?
+## Get started
 
-<Card
-  title="See complete examples"
-  icon="stars"
-  href="https://mintlify.com/customers"
->
-  Browse our showcase of exceptional documentation sites.
-</Card>
+<Steps>
+  <Step title="Browse the scheme gallery">
+    Check the [dark themes](/schemes/dark-themes) and [light themes](/schemes/light-themes) pages, or jump straight to the [GitHub screenshots directory](https://github.com/mbadolato/iTerm2-Color-Schemes/tree/master/screenshots) to preview thumbnails for every scheme.
+  </Step>
+  <Step title="Download or clone the repository">
+    ```bash
+    git clone https://github.com/mbadolato/iTerm2-Color-Schemes.git
+    cd iTerm2-Color-Schemes
+    ```
+  </Step>
+  <Step title="Install in your terminal">
+    Follow the [iTerm2 installation guide](/installation/iterm2) for macOS, or pick your terminal from the [Installation](/installation/other-terminals) section.
+  </Step>
+  <Step title="Use in Vim or VS Code">
+    See [Vim schemes](/using/vim) or [VS Code schemes](/using/vscode) to activate your chosen theme in your editor as well.
+  </Step>
+</Steps>
+
+<Note>
+  All schemes are community-contributed. See [CREDITS.md](https://github.com/mbadolato/iTerm2-Color-Schemes/blob/master/CREDITS.md) for attribution of each theme to its original author.
+</Note>

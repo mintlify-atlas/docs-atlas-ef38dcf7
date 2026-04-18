@@ -1,0 +1,99 @@
+---
+title: 'Install iTerm2 color schemes: GUI and bash script methods'
+description: 'Three ways to import .itermcolors files into iTerm2: keyboard shortcut (⌘+i), the Preferences menu, or a bash script for bulk imports.'
+---
+
+iTerm2 reads color schemes from `.itermcolors` files stored in the `schemes/` directory of this repository. You can install one scheme or all 485+ at once, depending on how you prefer to work. The three methods below all produce the same result — schemes appear under **Color Presets** in your profile settings.
+
+<Tabs>
+  <Tab title="Keyboard shortcut">
+    <Steps>
+      <Step title="Open profile colors">
+        Launch iTerm2 and press **CMD+i** (⌘+i) to open the profile settings panel for the current session.
+      </Step>
+      <Step title="Navigate to Colors">
+        Click the **Colors** tab at the top of the panel.
+      </Step>
+      <Step title="Open Color Presets">
+        Click the **Color Presets** dropdown in the bottom-right corner of the Colors tab.
+      </Step>
+      <Step title="Import">
+        Select **Import** from the dropdown. A file picker opens.
+      </Step>
+      <Step title="Select scheme files">
+        Navigate to the `schemes/` directory in the cloned repository. Select one or more `.itermcolors` files and click **Open**.
+      </Step>
+      <Step title="Apply the scheme">
+        Click **Color Presets** again and choose the imported scheme from the list.
+      </Step>
+    </Steps>
+  </Tab>
+
+  <Tab title="Preferences menu">
+    <Steps>
+      <Step title="Open Preferences">
+        Launch iTerm2. Click the **iTerm2** menu in the macOS menu bar and select **Preferences...**.
+      </Step>
+      <Step title="Open Profiles">
+        Click the **Profiles** icon in the toolbar at the top of the Preferences window.
+      </Step>
+      <Step title="Navigate to Colors">
+        Click the **Colors** tab on the right side of the Profiles panel.
+      </Step>
+      <Step title="Open Color Presets">
+        Click the **Color Presets** dropdown in the bottom-right corner.
+      </Step>
+      <Step title="Import">
+        Select **Import** from the dropdown. A file picker opens.
+      </Step>
+      <Step title="Select scheme files">
+        Navigate to the `schemes/` directory in the cloned repository. Select the `.itermcolors` file(s) you want and click **Open**.
+      </Step>
+      <Step title="Apply the scheme">
+        Click **Color Presets** again and choose the imported scheme from the list.
+      </Step>
+    </Steps>
+  </Tab>
+
+  <Tab title="Bash script">
+    <Steps>
+      <Step title="Clone the repository">
+        Make sure you have a local copy of the repository. The script at `tools/import-scheme.sh` must be run from within the project root.
+      </Step>
+      <Step title="Run the import script">
+        Use one of the following commands depending on what you want to import:
+
+        ```bash
+        # Import all color schemes
+        tools/import-scheme.sh schemes/*
+
+        # Import all color schemes (verbose mode)
+        tools/import-scheme.sh -v schemes/*
+
+        # Import a specific scheme by file path
+        tools/import-scheme.sh 'schemes/SpaceGray Eighties.itermcolors'
+
+        # Import a specific scheme by name
+        tools/import-scheme.sh 'SpaceGray Eighties'
+
+        # Import multiple schemes
+        tools/import-scheme.sh Molokai 'SpaceGray Eighties'
+        ```
+
+        <Note>
+          Quote scheme names that contain spaces. The script also accepts bare scheme names without the `.itermcolors` extension.
+        </Note>
+      </Step>
+      <Step title="Restart iTerm2">
+        Quit and relaunch iTerm2. The app must be fully restarted to reload the configuration file where the imported schemes are stored.
+      </Step>
+      <Step title="Apply the scheme">
+        Press **CMD+i**, go to the **Colors** tab, click **Color Presets**, and choose your newly imported scheme.
+      </Step>
+    </Steps>
+
+    <Info>
+      The script modifies `~/Library/Preferences/com.googlecode.iterm2.plist` directly using `PlistBuddy`. It only runs on macOS.
+    </Info>
+  </Tab>
+</Tabs>

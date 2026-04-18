@@ -1,0 +1,50 @@
+---
+title: 'Apply iTerm2 Color Schemes to KDE Konsole on Linux'
+description: 'Copy .colorscheme files from the konsole/ directory to ~/.config/konsole/ or ~/.local/share/konsole/ to apply themes to KDE Konsole.'
+---
+
+KDE Konsole reads color schemes from `.colorscheme` files placed in a specific directory on your system. The `konsole/` directory in this repository contains a `.colorscheme` file for every scheme in the collection. Installation is a matter of copying the files you want to the right location and restarting Konsole.
+
+<Steps>
+  <Step title="Clone or download the repository">
+    Make sure you have a local copy of the repository.
+
+    ```bash
+    git clone https://github.com/mbadolato/iTerm2-Color-Schemes.git
+    ```
+  </Step>
+
+  <Step title="Copy scheme files to the Konsole themes directory">
+    Copy the `.colorscheme` files you want into your user-level Konsole configuration directory:
+
+    ```bash
+    cp konsole/Dracula.colorscheme ~/.config/konsole/
+    ```
+
+    To install all schemes at once:
+
+    ```bash
+    cp konsole/*.colorscheme ~/.config/konsole/
+    ```
+
+    <Info>
+      In some versions of KDE, the Konsole theme directory may be located at `~/.local/share/konsole` instead of `~/.config/konsole`. If the themes do not appear after restarting, try copying to `~/.local/share/konsole/` instead.
+    </Info>
+  </Step>
+
+  <Step title="Install system-wide (optional)">
+    To make the themes available to all users on the system, copy the `.colorscheme` files to `/usr/share/konsole`:
+
+    ```bash
+    sudo cp konsole/*.colorscheme /usr/share/konsole/
+    ```
+  </Step>
+
+  <Step title="Restart Konsole">
+    Quit and relaunch Konsole to pick up the newly installed schemes.
+  </Step>
+
+  <Step title="Apply the scheme">
+    In Konsole, go to **Settings** → **Edit Current Profile** → **Appearance**. Your installed schemes will appear in the color scheme list. Select the one you want and click **OK**.
+  </Step>
+</Steps>

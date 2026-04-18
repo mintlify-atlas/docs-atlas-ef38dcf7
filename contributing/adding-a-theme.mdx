@@ -1,0 +1,155 @@
+---
+title: "Contribute a new color scheme to iTerm2 Color Schemes"
+description: "Submit a new color scheme via pull request: drop in a native .itermcolors file, or convert from another terminal format to YAML and generate from there."
+---
+
+Contributing a new theme means placing the right files in the right directories, verifying the output with the generation script, and optionally providing a screenshot and a credits entry. There are two starting points depending on what you already have: a native iTerm2 `.itermcolors` export, or a theme in another format such as Kitty or Ghostty.
+
+<Tabs>
+  <Tab title="Have an .itermcolors file">
+    Use this path if you already have an iTerm2 color preset you can export directly.
+
+    <Steps>
+      <Step title="Export your theme from iTerm2">
+        Launch iTerm2 and open the profile colors panel:
+
+        1. Press `⌘I` to open profile preferences.
+        2. Navigate to the **Colors** tab.
+        3. Click **Color Presets** → **Export**.
+        4. Save the `.itermcolors` file.
+      </Step>
+
+      <Step title="Place the file in schemes/">
+        Move the exported file into the `schemes/` directory at the root of the repository:
+
+        ```bash
+        mv <your-theme>.itermcolors schemes/
+        ```
+      </Step>
+
+      <Step title="Generate output formats">
+        Run `gen.py` with the `-s` flag to generate all derived formats (Kitty, Ghostty, Alacritty, Windows Terminal, etc.) for your theme only:
+
+        ```bash
+        python3 tools/gen.py -s <YourThemeName>
+        ```
+
+        Replace `<YourThemeName>` with the filename stem — for example, `Dracula` for `schemes/Dracula.itermcolors`.
+      </Step>
+
+      <Step title="Generate a screenshot">
+        Generate a preview screenshot for the theme. The tool will only create screenshots where they are missing:
+
+        ```bash
+        pushd tools && python3 -m screenshot_gen && popd
+        ```
+
+        <Tip>
+          If you have `oxipng` or `zopflipng` installed, the screenshot will be automatically optimized in place.
+        </Tip>
+      </Step>
+
+      <Step title="Update README.md and CREDITS.md">
+        Add your theme's screenshot reference to `README.md` in the appropriate alphabetical position under the Dark Themes or Light Themes section.
+
+        Optionally, add yourself to `CREDITS.md` to be credited for the contribution.
+      </Step>
+    </Steps>
+  </Tab>
+
+  <Tab title="Have a theme in another format">
+    Use this path if your theme exists as a Kitty `.conf`, a Ghostty configuration fragment, or another format. The project stores canonical color data as YAML files in `yaml/`, which `gen.py` then uses to produce all output formats.
+
+    <Steps>
+      <Step title="Convert your theme to YAML">
+        The repository provides conversion helpers for Kitty and Ghostty. Both tools read from standard input and write a YAML fragment to standard output.
+
+        <CodeGroup>
+
+        ```bash Kitty
+        python3 tools/kitty_to_yaml.py < path/to/your-theme.conf
+        ```
+
+        ```bash Ghostty
+        python3 tools/ghostty_to_yaml.py < path/to/your-theme-colors.conf
+        ```
+
+        </CodeGroup>
+
+        Redirect the output to a new file in `yaml/`:
+
+        ```bash
+        python3 tools/kitty_to_yaml.py < path/to/your-theme.conf > yaml/YourThemeName.yml
+        ```
+
+        For other formats, write the YAML manually following the [YAML format reference](/contributing/yaml-format).
+      </Step>
+
+      <Step title="Add a name field">
+        Open the generated YAML file and add the `name` field at the top if it is not already present:
+
+        ```yaml
+        name: "Your Theme Name"
+        ```
+      </Step>
+
+      <Step title="Place the file in yaml/">
+        The file must use the `.yml` extension and live in the `yaml/` directory. The filename (without extension) is used as the scheme identifier throughout the generation pipeline.
+      </Step>
+
+      <Step title="Generate output formats">
+        Run `gen.py` with the `-s` flag to generate the `.itermcolors` file and all other derived formats for your theme:
+
+        ```bash
+        python3 tools/gen.py -s <YourThemeName>
+        ```
+      </Step>
+
+      <Step title="Generate a screenshot">
+        Generate a preview screenshot. The tool will only create screenshots where they are missing:
+
+        ```bash
+        pushd tools && python3 -m screenshot_gen && popd
+        ```
+
+        <Tip>
+          If you have `oxipng` or `zopflipng` installed, the screenshot will be automatically optimized in place.
+        </Tip>
+      </Step>
+
+      <Step title="Update README.md and CREDITS.md">
+        Add your theme's screenshot reference to `README.md` in the appropriate alphabetical position under the Dark Themes or Light Themes section.
+
+        Optionally, add yourself to `CREDITS.md` to be credited for the contribution.
+      </Step>
+    </Steps>
+  </Tab>
+</Tabs>
+
+## Prerequisites
+
+Before running any generation scripts locally, set up the Python environment:
+
+<Steps>
+  <Step title="Install pyenv">
+    The project recommends [pyenv](https://github.com/pyenv/pyenv) to manage the Python version.
+  </Step>
+
+  <Step title="Install the correct Python version">
+    Run the following from the repository root. This reads the required version from `.python-version`:
+
+    ```bash
+    pyenv install
+    ```
+  </Step>
+
+  <Step title="Install Python dependencies">
+    ```bash
+    pip install -r requirements.txt
+    ```
+  </Step>
+</Steps>
+
+<Note>
+  If you have Docker installed, you can skip the Python setup entirely and use `generate-all.sh` instead. See [Generation tools](/contributing/generation-tools) for details.
+</Note>

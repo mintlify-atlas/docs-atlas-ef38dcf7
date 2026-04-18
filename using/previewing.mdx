@@ -1,0 +1,96 @@
+---
+title: "Preview iTerm2 color schemes before permanently installing"
+description: "Try any of the 485+ color schemes live in your terminal before committing to one, using iTerm2's built-in preview, a Ruby script, or a portable shell script."
+---
+
+Before importing a scheme permanently, you can audition it directly in your running terminal session. The repository ships two preview tools—one for iTerm2 and one for any terminal that supports OSC 4 escape codes—so you can cycle through dozens of schemes in seconds without touching your profile settings.
+
+## iTerm2 built-in preview
+
+iTerm2 lets you preview any `.itermcolors` file from the Colors preference pane before importing it.
+
+<Steps>
+  <Step title="Open iTerm2 preferences">
+    Press `⌘ + ,` (or go to **iTerm2 → Preferences**) and select the **Profiles** tab.
+  </Step>
+  <Step title="Navigate to Colors">
+    Select your profile, then click the **Colors** tab.
+  </Step>
+  <Step title="Open Color Presets">
+    Click the **Color Presets** dropdown in the lower-right corner, then choose **Import…**
+  </Step>
+  <Step title="Select a scheme file">
+    Navigate to the `schemes/` directory in the repository, select one or more `.itermcolors` files, and click **Open**.
+  </Step>
+  <Step title="Apply the preset">
+    Click **Color Presets** again and choose the scheme you just imported. The terminal updates immediately.
+  </Step>
+</Steps>
+
+## Ruby preview tool (`tools/preview.rb`)
+
+`tools/preview.rb` applies a scheme to the current iTerm2 session using [iTerm2 proprietary escape codes](https://iterm2.com/documentation-escape-codes.html), with no permanent changes to your profile. It supports interactive cycling through multiple files.
+
+<Warning>
+  This tool requires iTerm2 and does not work inside `tmux` or `screen` sessions.
+</Warning>
+
+<CodeGroup>
+
+```bash Preview a single scheme
+tools/preview.rb schemes/AdventureTime.itermcolors
+```
+
+```bash Cycle through all schemes
+# Press any key to advance, Delete to go back, Ctrl-C or Esc to stop
+tools/preview.rb schemes/*
+```
+
+</CodeGroup>
+
+## Shell preview script (`tools/preview-generic.sh`)
+
+`tools/preview-generic.sh` works with any terminal emulator that supports OSC 4 escape codes, including GNOME Terminal, the Linux console, and others. It sources the shell scripts from the `generic/` directory and lets you navigate with arrow keys.
+
+<CodeGroup>
+
+```bash Apply a single scheme
+bash generic/AdventureTime.sh
+```
+
+```bash Cycle interactively through all generic schemes
+# Press left/right arrow keys to navigate, q to quit
+./tools/preview-generic.sh generic/*
+```
+
+```bash Filter to light themes only
+./tools/preview-generic.sh generic/*Light*.sh
+```
+
+</CodeGroup>
+
+<Tip>
+  The script displays the current theme name and position (e.g., `>> Theme 3/485: Dracula.sh`) in the status line as you navigate.
+</Tip>
+
+## Screenshot gallery
+
+Every scheme in the collection has a pre-generated screenshot so you can browse visually without running anything locally.
+
+<AccordionGroup>
+  <Accordion title="Screenshots directory in the repository">
+    The `screenshots/` directory at the root of the repository contains a PNG for every scheme, named to match the scheme (e.g., `screenshots/dracula.png`). The README also embeds all screenshots inline, grouped into **Dark Themes** and **Light Themes** sections.
+  </Accordion>
+  <Accordion title="GitHub Pages gallery">
+    The `gh-pages/` branch powers a browsable web gallery. The `gh-pages/index.j2` template renders all scheme images from `gh-pages/images/` into a searchable HTML page, and the accompanying `javascripts/` and `stylesheets/` assets handle filtering and layout.
+  </Accordion>
+  <Accordion title="Generating new screenshots locally">
+    If you add a new scheme, generate its screenshot with the Python-based `screenshot_gen` tool:
+
+    ```bash
+    pushd tools && python3 -m screenshot_gen && popd
+    ```
+
+    The tool lives in `tools/screenshot_gen/` and will only generate PNGs for schemes that don't already have one. If `oxipng` or `zopflipng` is installed, the output is automatically optimized.
+  </Accordion>
+</AccordionGroup>

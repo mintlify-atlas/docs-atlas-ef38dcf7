@@ -1,0 +1,36 @@
+---
+title: 'Apply iTerm2 Color Schemes to the macOS Terminal app'
+description: 'How to import .terminal profile files into the macOS Terminal app from the terminal/ directory of the iTerm2 Color Schemes repository.'
+---
+
+The iTerm2 Color Schemes repository includes ports for the built-in macOS Terminal app. Every scheme in the collection has a corresponding `.terminal` file in the `terminal/` directory. These files are self-contained Terminal profiles that encode the full color palette and can be imported with a double-click.
+
+<Steps>
+  <Step title="Clone or download the repository">
+    Make sure you have a local copy of the repository so you can access the `terminal/` directory.
+
+    ```bash
+    git clone https://github.com/mbadolato/iTerm2-Color-Schemes.git
+    ```
+  </Step>
+
+  <Step title="Open the terminal/ directory">
+    Navigate to the `terminal/` directory inside the cloned repository. It contains one `.terminal` file per scheme — for example, `Dracula.terminal`, `Nord.terminal`, `TokyoNight.terminal`, and so on.
+  </Step>
+
+  <Step title="Double-click the scheme file">
+    Double-click any `.terminal` file. macOS Terminal will open and automatically import the profile. A dialog may ask you to confirm the import.
+
+    <Tip>
+      You can select and double-click multiple `.terminal` files at once to import several schemes in a single operation.
+    </Tip>
+  </Step>
+
+  <Step title="Set the scheme as the default">
+    Open Terminal and go to **Terminal** → **Preferences** → **Profiles**. Find the imported scheme in the profile list on the left, select it, and click **Default** to make it the default profile for new windows.
+  </Step>
+</Steps>
+
+<Note>
+  The `.terminal` format is specific to the macOS Terminal application. These files will not work in iTerm2 or other terminal emulators — use the `.itermcolors` files from the `schemes/` directory for iTerm2 instead.
+</Note>

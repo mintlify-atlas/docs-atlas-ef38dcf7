@@ -1,0 +1,57 @@
+---
+title: "iTerm2 Color Schemes: the full collection overview"
+description: "Explore the full iTerm2 Color Schemes library: 485+ dark and light themes with screenshots, organized by family. Covers .itermcolors format and port exports."
+---
+
+The iTerm2 Color Schemes project is a community-maintained library of 485 `.itermcolors` files, covering everything from the deep blacks of Dracula and Nord to the warm whites of Alabaster and GitHub Light. Every scheme in the collection ships with a screenshot so you can preview it before installing.
+
+## How the collection is organized
+
+Schemes are divided into two broad categories based on their background luminosity. Dark themes use dark or near-black backgrounds and are suited to low-light environments or personal preference. Light themes use white or off-white backgrounds and tend to work well in bright offices or when paired with printed material.
+
+<CardGroup cols={2}>
+  <Card title="Dark themes" icon="moon" href="/schemes/dark-themes">
+    Browse 400+ dark background schemes including Dracula, Nord, Monokai, Tokyo Night, Catppuccin, Gruvbox, and more.
+  </Card>
+  <Card title="Light themes" icon="sun" href="/schemes/light-themes">
+    Browse 80+ light background schemes including Alabaster, GitHub Light, Solarized Light, Catppuccin Latte, and more.
+  </Card>
+</CardGroup>
+
+## The `.itermcolors` format
+
+Each scheme is stored as an `.itermcolors` file — an Apple Property List (plist) in XML format. The file defines 16 ANSI terminal colors plus foreground, background, bold, cursor, and selection colors.
+
+```xml
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN"
+  "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+  <key>Ansi 0 Color</key>
+  <dict>
+    <key>Color Space</key>
+    <string>sRGB</string>
+    <key>Blue Component</key>
+    <real>0.21568627450980393</real>
+    <key>Green Component</key>
+    <real>0.23529411764705882</real>
+    <key>Red Component</key>
+    <real>0.27450980392156865</real>
+  </dict>
+  <!-- ... remaining color keys ... -->
+</dict>
+</plist>
+```
+
+To install a scheme in iTerm2, open **Preferences → Profiles → Colors → Color Presets → Import** and select the `.itermcolors` file. See the [quickstart guide](/quickstart) for step-by-step instructions including the bash import script.
+
+## Screenshots
+
+Every scheme in the collection has a corresponding screenshot rendered at the same resolution and with the same sample content, making it easy to compare palettes side by side. The full screenshot gallery is hosted on GitHub:
+
+[View all screenshots on GitHub →](https://github.com/mbadolato/iTerm2-Color-Schemes/tree/master/screenshots)
+
+<Info>
+  Schemes are automatically exported to 20+ other terminal and editor formats — including Alacritty, Kitty, Ghostty, Windows Terminal, Konsole, Terminator, VS Code, and Vim — using the project's Python-based generation tooling. You do not need to convert files manually. See the [terminal ports](/ports/overview) section for details.
+</Info>

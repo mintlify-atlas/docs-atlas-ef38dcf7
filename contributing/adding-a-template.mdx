@@ -1,0 +1,109 @@
+---
+title: "How to add a new output format template to the project"
+description: "Support a new terminal or editor by writing a Jinja2 template in tools/templates/ and running gen.py to produce output for all existing schemes."
+---
+
+The project uses a template-based generation pipeline: every file in `tools/templates/` describes how to render a color scheme for a specific terminal or editor. Adding a template for a new target application means taking a real config file from that application, replacing its color values with the placeholder variables listed below, and dropping the template file into `tools/templates/`. Running `gen.py` then produces one output file per scheme.
+
+<Steps>
+  <Step title="Obtain a real config file">
+    Get a working configuration file from your target terminal or editor. This is your starting point — you will transform it into a template by replacing its hardcoded color values with placeholder variables.
+  </Step>
+
+  <Step title="Replace color values with placeholder variables">
+    Substitute each hardcoded color in the config with the appropriate template variable from the list below. Variables use the `{{ }}` syntax and are resolved by the Jinja2 templating engine.
+
+    **Core color roles**
+
+    | Variable | Description |
+    |---|---|
+    | `{{ Background_Color }}` | Terminal background |
+    | `{{ Foreground_Color }}` | Default text color |
+    | `{{ Bold_Color }}` | Bold text color |
+    | `{{ Cursor_Color }}` | Cursor fill color |
+    | `{{ Cursor_Text_Color }}` | Text color under cursor |
+    | `{{ Selected_Text_Color }}` | Text color in selection |
+    | `{{ Selection_Color }}` | Selection background |
+
+    **ANSI palette (normal)**
+
+    | Variable | ANSI role |
+    |---|---|
+    | `{{ Ansi_0_Color }}` | Black |
+    | `{{ Ansi_1_Color }}` | Red |
+    | `{{ Ansi_2_Color }}` | Green |
+    | `{{ Ansi_3_Color }}` | Yellow |
+    | `{{ Ansi_4_Color }}` | Blue |
+    | `{{ Ansi_5_Color }}` | Magenta |
+    | `{{ Ansi_6_Color }}` | Cyan |
+    | `{{ Ansi_7_Color }}` | White |
+
+    **ANSI palette (bright)**
+
+    | Variable | ANSI role |
+    |---|---|
+    | `{{ Ansi_8_Color }}` | Bright black |
+    | `{{ Ansi_9_Color }}` | Bright red |
+    | `{{ Ansi_10_Color }}` | Bright green |
+    | `{{ Ansi_11_Color }}` | Bright yellow |
+    | `{{ Ansi_12_Color }}` | Bright blue |
+    | `{{ Ansi_13_Color }}` | Bright magenta |
+    | `{{ Ansi_14_Color }}` | Bright cyan |
+    | `{{ Ansi_15_Color }}` | Bright white |
+
+    Each color variable supports three representation sub-fields:
+
+    ```
+    {{ Background_Color.hex }}      # hex string, e.g. #282a36
+    {{ Background_Color.rgb }}      # "(r, g, b)" string
+    {{ Background_Color.guint16 }}  # guint16 integer representation
+    ```
+
+    <Note>
+      The `guint16` sub-field has a known typo in the variable name for `Background_Color`: it appears as `{{ Backgroun_Color.guint16 }}` (missing the `d`) in the original specification. Match the exact variable names your target application requires.
+    </Note>
+
+    **Metadata fields**
+
+    | Variable | Description |
+    |---|---|
+    | `{{ Guint16_Palette }}` | String containing all ANSI colors as guint16 values |
+    | `{{ Dark_Theme }}` | Sign indicating whether the theme is dark |
+  </Step>
+
+  <Step title="Add new color value types if needed">
+    If your target application requires a color representation that is not already available (for example, a decimal RGB format or a platform-specific encoding), add the conversion logic to `tools/converter.py`.
+  </Step>
+
+  <Step title="Place the template in tools/templates/">
+    Save the completed template file in `tools/templates/`. The filename controls the output directory name and the extension of every generated file.
+
+    For example, a template named `editor.ext` will generate output files at `editor/<SchemeName>.ext`.
+
+    Existing templates in `tools/templates/` include `kitty.conf`, `alacritty.toml`, `windowsterminal.json`, `ghostty`, `wezterm.toml`, and others — look at these for reference examples.
+  </Step>
+
+  <Step title="Generate output for all schemes">
+    To generate output for every scheme using only your new template:
+
+    ```bash
+    cd tools/ && ./gen.py -t <template-name>
+    ```
+
+    For example, to regenerate only the Kitty template output:
+
+    ```bash
+    cd tools/ && ./gen.py -t kitty
+    ```
+
+    To regenerate all schemes for all templates:
+
+    ```bash
+    cd tools/ && ./gen.py
+    ```
+  </Step>
+
+  <Step title="Update dependencies if needed">
+    If you added new Python packages or changed the required Python version while working on the template or converter, update `requirements.txt` or `.python-version` accordingly before submitting your pull request.
+  </Step>
+</Steps>

@@ -1,0 +1,99 @@
+---
+title: 'Alacritty color schemes: installation and usage guide'
+description: 'Apply any of 485+ iTerm2 Color Schemes to Alacritty using TOML theme files from the alacritty/ directory via the import directive or direct paste.'
+---
+
+Alacritty themes are stored in the `alacritty/` directory of the repository, one `.toml` file per scheme. Each file defines the full 16-color ANSI palette plus primary, cursor, and selection colors in Alacritty's native TOML format. You can apply a scheme either by using Alacritty's `import` directive — keeping your main config file clean — or by pasting the color tables directly into your existing `alacritty.toml`.
+
+## File structure
+
+Each `.toml` file contains five TOML tables. Here is the complete content of `Monokai Classic.toml` as a representative example:
+
+```toml Monokai Classic.toml
+# Colors (Monokai Classic)
+
+[colors.bright]
+black = '#6e7066'
+blue = '#fd971f'
+cyan = '#66d9ef'
+green = '#a6e22e'
+magenta = '#ae81ff'
+red = '#f92672'
+white = '#fdfff1'
+yellow = '#e6db74'
+
+[colors.cursor]
+cursor = '#c0c1b5'
+text = '#8d8e82'
+
+[colors.normal]
+black = '#272822'
+blue = '#fd971f'
+cyan = '#66d9ef'
+green = '#a6e22e'
+magenta = '#ae81ff'
+red = '#f92672'
+white = '#fdfff1'
+yellow = '#e6db74'
+
+[colors.primary]
+background = '#272822'
+foreground = '#fdfff1'
+
+[colors.selection]
+background = '#57584f'
+text = '#fdfff1'
+```
+
+The five tables map directly to Alacritty's color configuration:
+
+| Table | Purpose |
+|---|---|
+| `colors.primary` | Terminal background and foreground |
+| `colors.normal` | Standard ANSI colors 0–7 |
+| `colors.bright` | Bright ANSI colors 8–15 |
+| `colors.cursor` | Cursor fill and text color |
+| `colors.selection` | Selected text background and foreground |
+
+<Note>
+  Not all schemes define a `[colors.selection]` table. The template only emits it when both `Selection_Color` and `Selected_Text_Color` are present in the source YAML.
+</Note>
+
+## Installation
+
+<Steps>
+  <Step title="Clone or download the repository">
+    ```bash
+    git clone https://github.com/mbadolato/iTerm2-Color-Schemes.git
+    ```
+  </Step>
+  <Step title="Copy the theme file to your Alacritty themes directory">
+    Create a themes directory if it does not already exist, then copy the `.toml` file for the scheme you want.
+
+    ```bash
+    mkdir -p ~/.config/alacritty/themes
+    cp iTerm2-Color-Schemes/alacritty/"Monokai Classic.toml" ~/.config/alacritty/themes/
+    ```
+  </Step>
+  <Step title="Apply the theme in your Alacritty config">
+    Add an `import` entry at the top of your `~/.config/alacritty/alacritty.toml` file:
+
+    ```toml ~/.config/alacritty/alacritty.toml
+    import = ["~/.config/alacritty/themes/Monokai Classic.toml"]
+    ```
+
+    Alternatively, paste the contents of the `.toml` file directly into your `alacritty.toml`. When pasting, the `[colors.*]` tables merge with any existing color configuration.
+  </Step>
+  <Step title="Restart Alacritty">
+    Alacritty reads its configuration on launch. Open a new window or restart the process to see the new colors.
+  </Step>
+</Steps>
+
+<Tip>
+  If you have an existing kitty `.conf` file that you want to convert to the project's YAML format before generating an Alacritty theme, use `tools/kitty_to_yaml.py`. Pipe the `.conf` file into the script and redirect the output to a `.yml` file in the `yaml/` directory, then run `tools/gen.py -t alacritty` to generate the `.toml`.
+
+  ```bash
+  python3 tools/kitty_to_yaml.py < my-theme.conf > yaml/MyTheme.yml
+  python3 tools/gen.py -t alacritty -s MyTheme
+  ```
+</Tip>

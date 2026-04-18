@@ -1,0 +1,98 @@
+---
+title: "Apply iTerm2 Color Schemes to VS Code's integrated terminal"
+description: "Apply any of the 485+ terminal color schemes to VS Code's integrated terminal by copying the JSON settings from the vscode/ directory into your user settings."
+---
+
+The `vscode/` directory contains one JSON file per scheme, each containing the `workbench.colorCustomizations` block needed to retheme VS Code's integrated terminal. These files only affect the terminal panel—they do not change the editor's syntax highlighting theme.
+
+## Installing a color scheme
+
+<Steps>
+  <Step title="Choose a scheme">
+    Browse the `vscode/` directory to find the scheme you want. Files are named after the scheme with spaces preserved (e.g., `vscode/Dracula.json`, `vscode/Tomorrow Night Eighties.json`).
+  </Step>
+  <Step title="Open your VS Code user settings">
+    Open the Command Palette with `Ctrl+Shift+P` (or `⌘+Shift+P` on macOS), then run **Preferences: Open User Settings (JSON)**. This opens your `settings.json` file.
+  </Step>
+  <Step title="Copy and paste the scheme content">
+    Open the `.json` file from the `vscode/` directory, copy its contents, and merge the `workbench.colorCustomizations` block into your `settings.json`.
+
+    If `workbench.colorCustomizations` already exists in your settings, merge the terminal color keys into the existing object rather than duplicating the key.
+  </Step>
+  <Step title="Save and verify">
+    Save `settings.json`. VS Code applies the terminal colors immediately without restarting.
+  </Step>
+</Steps>
+
+## Color scheme file structure
+
+Each file in `vscode/` contains a single `workbench.colorCustomizations` object covering all 16 ANSI terminal colors plus foreground, background, selection, and cursor colors. Here is `vscode/Dracula.json` as a representative example:
+
+```json vscode/Dracula.json
+{
+    "workbench.colorCustomizations": {
+        "terminal.foreground": "#f8f8f2",
+        "terminal.background": "#282a36",
+        "terminal.ansiBlack": "#21222c",
+        "terminal.ansiBlue": "#bd93f9",
+        "terminal.ansiCyan": "#8be9fd",
+        "terminal.ansiGreen": "#50fa7b",
+        "terminal.ansiMagenta": "#ff79c6",
+        "terminal.ansiRed": "#ff5555",
+        "terminal.ansiWhite": "#f8f8f2",
+        "terminal.ansiYellow": "#f1fa8c",
+        "terminal.ansiBrightBlack": "#6272a4",
+        "terminal.ansiBrightBlue": "#d6acff",
+        "terminal.ansiBrightCyan": "#a4ffff",
+        "terminal.ansiBrightGreen": "#69ff94",
+        "terminal.ansiBrightMagenta": "#ff92df",
+        "terminal.ansiBrightRed": "#ff6e6e",
+        "terminal.ansiBrightWhite": "#ffffff",
+        "terminal.ansiBrightYellow": "#ffffa5",
+        "terminal.selectionBackground": "#44475a",
+        "terminalCursor.background": "#282a36",
+        "terminalCursor.foreground": "#f8f8f2"
+    }
+}
+```
+
+## Merging into an existing settings.json
+
+If your `settings.json` already has a `workbench.colorCustomizations` block (for example, to customize editor UI colors), add the terminal keys into the same object:
+
+```json settings.json (merged example)
+{
+    "workbench.colorCustomizations": {
+        "activityBar.background": "#1e1e2e",
+        "terminal.foreground": "#f8f8f2",
+        "terminal.background": "#282a36",
+        "terminal.ansiBlack": "#21222c",
+        "terminal.ansiBlue": "#bd93f9",
+        "terminal.ansiCyan": "#8be9fd",
+        "terminal.ansiGreen": "#50fa7b",
+        "terminal.ansiMagenta": "#ff79c6",
+        "terminal.ansiRed": "#ff5555",
+        "terminal.ansiWhite": "#f8f8f2",
+        "terminal.ansiYellow": "#f1fa8c",
+        "terminal.ansiBrightBlack": "#6272a4",
+        "terminal.ansiBrightBlue": "#d6acff",
+        "terminal.ansiBrightCyan": "#a4ffff",
+        "terminal.ansiBrightGreen": "#69ff94",
+        "terminal.ansiBrightMagenta": "#ff92df",
+        "terminal.ansiBrightRed": "#ff6e6e",
+        "terminal.ansiBrightWhite": "#ffffff",
+        "terminal.ansiBrightYellow": "#ffffa5",
+        "terminal.selectionBackground": "#44475a",
+        "terminalCursor.background": "#282a36",
+        "terminalCursor.foreground": "#f8f8f2"
+    }
+}
+```
+
+<Warning>
+  Do not place two separate `workbench.colorCustomizations` keys in the same JSON file. JSON does not allow duplicate keys—the second one will silently overwrite the first.
+</Warning>
+
+## Available schemes
+
+The `vscode/` directory contains 485 files, one per scheme. File names match the scheme's display name with spaces preserved, so you can search by the name you already know from the screenshots or README.

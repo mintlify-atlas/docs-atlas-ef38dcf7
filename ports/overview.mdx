@@ -1,0 +1,56 @@
+---
+title: 'Terminal ports: overview of all supported terminals'
+description: 'All terminals supported by iTerm2 Color Schemes: directory paths, file formats, and links to installation guides for Alacritty, kitty, and Ghostty.'
+---
+
+The iTerm2 Color Schemes collection ships ports for over two dozen terminal emulators and environments. Each port is generated from the same YAML source, so every terminal gets the same complete set of 485+ schemes. The three most popular terminals — Alacritty, kitty, and Ghostty — have dedicated pages with full installation walkthroughs. All other supported terminals are listed in the table below.
+
+<CardGroup cols={3}>
+  <Card title="Alacritty" icon="terminal" href="/ports/alacritty">
+    TOML color configuration files in the `alacritty/` directory. Supports Alacritty's native `import` directive.
+  </Card>
+  <Card title="kitty" icon="terminal" href="/ports/kitty">
+    `.conf` files in the `kitty/` directory. Include directly in `kitty.conf` or copy individual values.
+  </Card>
+  <Card title="Ghostty" icon="terminal" href="/ports/ghostty">
+    Extensionless config fragments in the `ghostty/` directory. Paste directly into your Ghostty config.
+  </Card>
+</CardGroup>
+
+## All supported terminal ports
+
+| Terminal | Directory | File format |
+|---|---|---|
+| Alacritty | `alacritty/` | `.toml` |
+| kitty | `kitty/` | `.conf` |
+| Ghostty | `ghostty/` | No extension |
+| Windows Terminal | `windowsterminal/` | `.json` |
+| Konsole | `konsole/` | `.colorscheme` |
+| PuTTY | `putty/` | `.reg` |
+| Xterm / Rxvt (xrdb) | `xrdb/` | `.xrdb` |
+| Xresources | `Xresources/` | No extension |
+| Terminator | `terminator/` | Config snippet (INI) |
+| Termite | `termite/` | Config snippet |
+| Xfce4 Terminal | `xfce4terminal/colorschemes/` | `.theme` |
+| MobaXterm | `mobaxterm/` | INI fragment |
+| LXTerminal | `lxterminal/` | Config snippet |
+| FreeBSD vt(4) | `freebsd_vt/` | Config snippet |
+| Remmina | `remmina/` | Config snippet |
+| Tilda | `tilda/` | Config snippet |
+| Rio | `rio/` | `.toml` |
+| WezTerm | `wezterm/` | Config snippet |
+| Wayst | `wayst/` | Config snippet |
+| Termux | `termux/` | `colors.properties` |
+| Electerm | `electerm/` | Config snippet |
+| foot | `foot/` | Config snippet |
+| HexChat | `hexchat/` | Config snippet |
+| Royal TS | `royalts/` | Config snippet |
+| VHS | `vhs/` | Config snippet |
+| dynamic-colors | `dynamic-colors/` | Shell script |
+| iterm-dynamic-colors | `iterm-dynamic-colors/` | Shell script |
+| Pantheon Terminal | `pantheonterminal/` | Config snippet |
+| Termframe | `termframe/` | Config snippet |
+
+<Info>
+  All ports are generated automatically from the same YAML source files in the `yaml/` directory. If a terminal you use is not listed, you can add support for it by contributing a new template. See the [contributing guide](/contributing/adding-a-template) for details.
+</Info>

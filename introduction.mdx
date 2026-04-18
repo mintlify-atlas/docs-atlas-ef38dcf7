@@ -1,0 +1,79 @@
+---
+title: "iTerm2 Color Schemes: open-source terminal theme library"
+description: "iTerm2 Color Schemes is a community-maintained library of 485+ terminal color themes for iTerm2, with ports to 20+ other terminals and editors."
+---
+
+iTerm2 Color Schemes is an open-source collection of over 485 hand-curated terminal color themes. Originally built for [iTerm2](https://iterm2.com) on macOS, the project has grown to include automatic exports to more than 20 terminals and editors — from Alacritty and Ghostty to Windows Terminal, Konsole, and Vim. Every scheme ships as a native `.itermcolors` file and is regenerated for all supported ports using the project's Python-based toolchain.
+
+<CardGroup cols={2}>
+  <Card title="Quick start" icon="rocket" href="/quickstart">
+    Install your first color scheme in iTerm2 in under two minutes using the bash script or the GUI.
+  </Card>
+  <Card title="Install in iTerm2" icon="apple" href="/installation/iterm2">
+    Step-by-step instructions for importing `.itermcolors` files into iTerm2 profiles.
+  </Card>
+  <Card title="Other terminal ports" icon="terminal" href="/installation/other-terminals">
+    Use your scheme in Alacritty, Kitty, Ghostty, Konsole, Windows Terminal, and more.
+  </Card>
+  <Card title="Browse all schemes" icon="palette" href="/schemes/overview">
+    Explore the full library of 485+ dark and light themes with screenshots.
+  </Card>
+  <Card title="Contribute a theme" icon="code-pull-request" href="/contributing/adding-a-theme">
+    Submit your own color scheme to the collection via pull request.
+  </Card>
+</CardGroup>
+
+## What's in the collection
+
+The `schemes/` directory contains one `.itermcolors` file per theme — 485 entries in total, ranging from popular community favorites to retro and novelty palettes. Themes are split into dark and light variants, and many well-known schemes have multiple sub-variants (for example, Catppuccin ships as Frappe, Latte, Macchiato, and Mocha).
+
+<Info>
+  All schemes are community-contributed. Attribution for each theme lives in [CREDITS.md](https://github.com/mbadolato/iTerm2-Color-Schemes/blob/master/CREDITS.md) in the repository root.
+</Info>
+
+## Supported terminals and editors
+
+The project maintains ports to the following platforms. Each port is auto-generated from the same source color data using templates in `tools/templates/`.
+
+| Platform | Format |
+|---|---|
+| iTerm2 | `.itermcolors` |
+| macOS Terminal | `.terminal` |
+| Konsole | color scheme files |
+| PuTTY | `.reg` registry entries |
+| Xfce Terminal | `.theme` files |
+| Windows Terminal | JSON fragments |
+| Alacritty | TOML |
+| Kitty | `.conf` |
+| Ghostty | config snippets |
+| Terminator | config sections |
+| MobaXterm | `.mxt` |
+| LXTerminal | config files |
+| Visual Studio Code | JSON theme |
+| FreeBSD vt(4) | palette files |
+| Termux | `colors.properties` |
+| Vim | colorscheme files |
+| X11 / Xresources | `.Xresources` / XRDB |
+| Generic / Remmina / Termite / Tilda | various |
+
+<Tip>
+  If your terminal is not listed, check the [contributing guide](/contributing/adding-a-template) — adding a new port template is straightforward and contributions are welcome.
+</Tip>
+
+## How the project is structured
+
+```
+iTerm2-Color-Schemes/
+├── schemes/          # 485 native .itermcolors files
+├── screenshots/      # PNG preview for every scheme
+├── tools/
+│   ├── import-scheme.sh   # Bash installer for iTerm2 (macOS)
+│   ├── gen.py             # Generates all port formats from source
+│   └── templates/         # One template per terminal/editor port
+├── yaml/             # YAML source files (Gogh-compatible format)
+└── CREDITS.md        # Per-theme attribution
+```
+
+<Note>
+  The `schemes/` directory is the canonical source for iTerm2. All other terminal formats are derived from YAML source files in `yaml/` using `tools/gen.py`.
+</Note>

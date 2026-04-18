@@ -1,0 +1,90 @@
+---
+title: 'Ghostty color schemes: installation and usage guide'
+description: 'Apply any of 485+ iTerm2 Color Schemes to Ghostty by pasting palette and named color settings from the ghostty/ directory into your config.'
+---
+
+Ghostty themes are stored in the `ghostty/` directory of the repository. Each theme is a plain file with no extension, named exactly after the color scheme. Each file contains Ghostty `palette` assignments for all 16 ANSI colors plus background, foreground, cursor, and selection settings in Ghostty's native key-value syntax. Apply a scheme by pasting its contents into your `~/.config/ghostty/config` file.
+
+## File structure
+
+Each Ghostty config fragment uses `palette = N=#rrggbb` lines for the 16-color palette, followed by named color settings. Here is the complete content of the `Monokai Classic` file as a representative example:
+
+```text Monokai Classic
+palette = 0=#272822
+palette = 1=#f92672
+palette = 2=#a6e22e
+palette = 3=#e6db74
+palette = 4=#fd971f
+palette = 5=#ae81ff
+palette = 6=#66d9ef
+palette = 7=#fdfff1
+palette = 8=#6e7066
+palette = 9=#f92672
+palette = 10=#a6e22e
+palette = 11=#e6db74
+palette = 12=#fd971f
+palette = 13=#ae81ff
+palette = 14=#66d9ef
+palette = 15=#fdfff1
+background = #272822
+foreground = #fdfff1
+cursor-color = #c0c1b5
+cursor-text = #8d8e82
+selection-background = #57584f
+selection-foreground = #fdfff1
+```
+
+The keys map to Ghostty's color configuration options:
+
+| Key | Purpose |
+|---|---|
+| `palette = 0`–`palette = 7` | Normal ANSI colors 0–7 |
+| `palette = 8`–`palette = 15` | Bright ANSI colors 8–15 |
+| `background` / `foreground` | Terminal background and foreground |
+| `cursor-color` / `cursor-text` | Cursor fill and text |
+| `selection-background` / `selection-foreground` | Selection highlight colors |
+
+<Note>
+  `cursor-text` is only emitted when the source YAML provides a `Cursor_Text_Color` value. If the key is absent from a theme file, Ghostty falls back to its default cursor text color.
+</Note>
+
+## Installation
+
+<Steps>
+  <Step title="Clone or download the repository">
+    ```bash
+    git clone https://github.com/mbadolato/iTerm2-Color-Schemes.git
+    ```
+  </Step>
+  <Step title="Open the theme file for the scheme you want">
+    Theme files are in the `ghostty/` directory, named after the scheme with no file extension.
+
+    ```bash
+    cat iTerm2-Color-Schemes/ghostty/"Monokai Classic"
+    ```
+  </Step>
+  <Step title="Paste the contents into your Ghostty config">
+    Open `~/.config/ghostty/config` and paste the theme content. Color settings defined later in the file override earlier ones, so you can place the block anywhere — typically at the end is easiest.
+
+    ```bash
+    cat iTerm2-Color-Schemes/ghostty/"Monokai Classic" >> ~/.config/ghostty/config
+    ```
+  </Step>
+  <Step title="Reload Ghostty">
+    Ghostty picks up configuration changes when you open a new window or reload the config. Use the Ghostty command palette or restart the application to apply the new colors.
+  </Step>
+</Steps>
+
+## Converting a Ghostty theme to YAML
+
+If you have a Ghostty config fragment from another source and want to contribute it to the project, use `tools/ghostty_to_yaml.py` to produce the intermediate YAML format that the generation pipeline expects.
+
+```bash
+python3 tools/ghostty_to_yaml.py < my-theme > yaml/MyTheme.yml
+```
+
+The script reads the Ghostty config fragment from `stdin` and writes a sorted YAML fragment to `stdout`. It maps Ghostty keys to the project's YAML field names (for example, `cursor-color` becomes `cursor`, `selection-background` becomes `selection`, and each `palette = N=#rrggbb` line becomes `color_NN`). Any key it does not recognise is reported on `stderr` and skipped. Once the YAML file is in place, run the generation tool to produce all other formats:
+
+```bash
+python3 tools/gen.py -s MyTheme
+```

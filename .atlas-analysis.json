@@ -1,23 +1,11 @@
 {
-  "$schema": "https://mintlify.com/docs.json",
-  "name": "iTerm2 Color Schemes",
+  "projectType": "general",
+  "projectName": "iTerm2 Color Schemes",
+  "projectDescription": "A curated collection of 485+ terminal color schemes for iTerm2 and ports to 20+ other terminals and editors.",
   "theme": "willow",
-  "colors": {
-    "primary": "#4A90D9",
-    "light": "#EAF2FB",
-    "dark": "#1A2332"
-  },
-  "navbar": {
-    "primary": {
-      "type": "github",
-      "href": "https://github.com/mbadolato/iTerm2-Color-Schemes"
-    }
-  },
-  "footer": {
-    "socials": {
-      "github": "https://github.com/mbadolato/iTerm2-Color-Schemes"
-    }
-  },
+  "primaryColor": "#4A90D9",
+  "lightColor": "#EAF2FB",
+  "darkColor": "#1A2332",
   "navigation": {
     "tabs": [
       {
@@ -82,5 +70,25 @@
         ]
       }
     ]
-  }
+  },
+  "keyFeatures": [
+    "485+ terminal color schemes for iTerm2 in .itermcolors format",
+    "Ports to 20+ terminals: Alacritty, Kitty, Ghostty, Windows Terminal, Konsole, PuTTY, Xresources, Terminator, and more",
+    "Vim and VS Code color scheme exports",
+    "YAML-based scheme authoring format compatible with Gogh project",
+    "Python-based generation tooling (gen.py) using Jinja2 templates",
+    "Screenshot previews for all schemes",
+    "Docker-based contribution workflow",
+    "Import shell script for bulk iTerm2 scheme installation"
+  ],
+  "publicApiSurface": [
+    "tools/gen.py -s <SchemeName> — generate all terminal formats for a scheme",
+    "tools/gen.py -t <template> — generate all schemes for a template",
+    "tools/import-scheme.sh schemes/* — import schemes into iTerm2",
+    "yaml/<ThemeName>.yml — YAML source format for color scheme authoring",
+    "schemes/<ThemeName>.itermcolors — iTerm2 native color scheme format",
+    "tools/kitty_to_yaml.py — convert Kitty config to YAML format",
+    "tools/ghostty_to_yaml.py — convert Ghostty config to YAML format",
+    "generate-all.sh — regenerate all terminal format exports (Docker)"
+  ]
 }

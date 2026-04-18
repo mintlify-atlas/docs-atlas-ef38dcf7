@@ -1,0 +1,248 @@
+---
+title: 'Color scheme installation for PuTTY, Terminator, and more'
+description: 'Install iTerm2 Color Schemes in PuTTY, Xresources/XRDB, Terminator, XFCE Terminal, MobaXterm, LXTerminal, FreeBSD VT, Rio, WezTerm, Tilda, and Wayst.'
+---
+
+The iTerm2 Color Schemes repository includes ports for a wide range of terminal emulators beyond iTerm2, macOS Terminal, Konsole, and Windows Terminal. Several modern GPU-accelerated terminals have their own dedicated pages with more detail.
+
+<CardGroup cols={3}>
+  <Card title="Alacritty" icon="terminal" href="/ports/alacritty">
+    TOML-based color configuration for the Alacritty terminal emulator.
+  </Card>
+  <Card title="Kitty" icon="terminal" href="/ports/kitty">
+    Color schemes for the Kitty terminal, in Kitty's native config format.
+  </Card>
+  <Card title="Ghostty" icon="terminal" href="/ports/ghostty">
+    Color schemes for the Ghostty terminal emulator.
+  </Card>
+</CardGroup>
+
+The terminals below are covered here directly. Find the scheme files in the directory listed for each terminal, then follow the steps.
+
+<AccordionGroup>
+  <Accordion title="PuTTY">
+    PuTTY color schemes are stored as Windows Registry (`.reg`) files in the `putty/` directory. There are two ways to install them.
+
+    **New session method** — creates a new PuTTY session with only colors configured:
+
+    1. Download the `.reg` file for your chosen scheme from `putty/`.
+    2. Right-click the file in Windows Explorer and choose **Merge**.
+    3. Click **Yes** when prompted. The scheme appears as a new PuTTY session entry with all default settings except the color values under **Window → Colours → Adjust the precise colours PuTTY displays**.
+
+    **Modify session method** — applies colors to an existing PuTTY session:
+
+    1. Download the `.reg` file for your chosen scheme.
+    2. Open the file in a text editor. Find the line that looks like:
+       ```
+       [HKEY_CURRENT_USER\Software\SimonTatham\PuTTY\Sessions\Molokai]
+       ```
+    3. Replace the session name (`Molokai` in the example) with the name of the existing session you want to modify. Note that some special characters in session names must be percent-encoded (for example, a space becomes `%20`). Check your session names in `regedit.exe` under `HKEY_CURRENT_USER\Software\SimonTatham\PuTTY\Sessions\`.
+    4. Save the file, then right-click it and choose **Merge**.
+
+    For best results with PuTTY colors, use these appearance settings:
+
+    ```
+    Window > Appearance
+      Font: Consolas, bold, 14-point
+      Font quality: ClearType
+
+    Window > Colours
+      [X] Allow terminal to specify ANSI colours
+      [X] Allow terminal to use xterm 256-colour mode
+      Indicate bolded text by changing: The colour
+      [ ] Attempt to use logical palettes
+      [ ] Use system colours
+    ```
+  </Accordion>
+
+  <Accordion title="Xresources / XRDB">
+    Schemes for X11 terminals (XTerm, Rxvt, and others that read from the X resource database) are in the `xrdb/` directory as `.xrdb` files.
+
+    1. Include the scheme file from `xrdb/` in your `.Xresources` or `.Xdefaults` file:
+
+       ```
+       #include "/path/to/iTerm2-Color-Schemes/xrdb/Blazer.xrdb"
+       ```
+
+    2. The imported file provides `#define` constants for each color. Map them to your terminal's resource keys. For example, for XTerm and Rxvt:
+
+       ```
+       XTerm*color0:  Ansi_0_Color
+       XTerm*color1:  Ansi_1_Color
+       XTerm*color2:  Ansi_2_Color
+       XTerm*color3:  Ansi_3_Color
+       XTerm*color4:  Ansi_4_Color
+       XTerm*color5:  Ansi_5_Color
+       XTerm*color6:  Ansi_6_Color
+       XTerm*color7:  Ansi_7_Color
+       XTerm*color8:  Ansi_8_Color
+       XTerm*color9:  Ansi_9_Color
+       XTerm*color10: Ansi_10_Color
+       XTerm*color11: Ansi_11_Color
+       XTerm*color12: Ansi_12_Color
+       XTerm*color13: Ansi_13_Color
+       XTerm*color14: Ansi_14_Color
+       XTerm*color15: Ansi_15_Color
+       XTerm*colorBD: Bold_Color
+       XTerm*colorIT: Italic_Color
+       XTerm*colorUL: Underline_Color
+       XTerm*foreground: Foreground_Color
+       XTerm*background: Background_Color
+       XTerm*cursorColor: Cursor_Color
+       ```
+
+    3. Merge the configuration into the running X resource database:
+
+       ```bash
+       xrdb -merge YOUR_FILE_CONTAINING_ABOVE_SNIPPETS
+       ```
+
+    4. Open new XTerm or Rxvt windows to see the updated colors.
+  </Accordion>
+
+  <Accordion title="Terminator">
+    Terminator scheme snippets are in the `terminator/` directory as `.config` files. Each file contains the configuration block for a single profile.
+
+    1. Open your Terminator configuration file, located at `$HOME/.config/terminator/config`.
+    2. Copy the contents of the `.config` file for your chosen scheme from the `terminator/` directory.
+    3. Paste the snippet into the `[profiles]` section of your Terminator config. An example showing the Symfonic theme alongside the default profile:
+
+       ```ini
+       [global_config]
+       [keybindings]
+       [profiles]
+         [[default]]
+          palette = "#1a1a1a:#f4005f:#98e024:#fa8419:#9d65ff:#f4005f:#58d1eb:#c4c5b5:#625e4c:#f4005f:#98e024:#e0d561:#9d65ff:#f4005f:#58d1eb:#f6f6ef"
+          background_image = None
+          cursor_color = "#f6f7ec"
+          foreground_color = "#c4c5b5"
+          background_color = "#1a1a1a"
+         [[Symfonic]]
+          palette = "#000000:#dc322f:#56db3a:#ff8400:#0084d4:#b729d9:#ccccff:#ffffff:#1b1d21:#dc322f:#56db3a:#ff8400:#0084d4:#b729d9:#ccccff:#ffffff"
+          background_color = "#000000"
+          cursor_color = "#dc322f"
+          foreground_color = "#ffffff"
+          background_image = None
+       [layouts]
+         [[default]]
+          [[[child1]]]
+            type = Terminal
+            parent = window0
+          [[[window0]]]
+            type = Window
+            parent = ""
+       [plugins]
+       ```
+
+    4. Save the file and restart Terminator.
+  </Accordion>
+
+  <Accordion title="Termite">
+    Termite scheme files are in the `termite/` directory. Each file is named after the scheme (no extension).
+
+    1. Copy the contents of the scheme file from `termite/` for your chosen scheme.
+    2. Paste the contents into your Termite configuration file, typically located at `~/.config/termite/config`, in the `[colors]` section.
+    3. Restart Termite to apply the changes.
+  </Accordion>
+
+  <Accordion title="XFCE Terminal">
+    XFCE Terminal scheme files are in the `xfce4terminal/` directory as `.theme` files.
+
+    1. Create the XFCE Terminal colorschemes directory if it does not exist, then copy the `.theme` files:
+
+       ```bash
+       mkdir -p ~/.local/share/xfce4/terminal/colorschemes/
+       cp xfce4terminal/*.theme ~/.local/share/xfce4/terminal/colorschemes/
+       ```
+
+    2. Restart XFCE Terminal.
+    3. Go to **Edit** → **Preferences** → **Colors** and select your scheme from the **Presets** dropdown.
+  </Accordion>
+
+  <Accordion title="MobaXterm">
+    MobaXterm scheme files are in the `mobaxterm/` directory as `.ini` files.
+
+    1. Open the `.ini` file for your chosen scheme from the `mobaxterm/` directory in a text editor and copy its contents.
+    2. Open your `MobaXterm.ini` file. This is typically found in the same directory as the MobaXterm executable, or at `%APPDATA%\MobaXterm\MobaXterm.ini`.
+    3. Paste the copied content into the `[Colors]` section of `MobaXterm.ini`.
+    4. Restart MobaXterm for the changes to take effect.
+  </Accordion>
+
+  <Accordion title="LXTerminal">
+    LXTerminal scheme files are in the `lxterminal/` directory as `.conf` files.
+
+    1. Open the `.conf` file for your chosen scheme from the `lxterminal/` directory and copy its contents.
+    2. Open your LXTerminal configuration file. It is typically located at `~/.config/lxterminal/lxterminal.conf`.
+    3. Paste the copied content into the `[general]` section of the configuration file.
+    4. Restart LXTerminal to apply the changes.
+  </Accordion>
+
+  <Accordion title="FreeBSD VT">
+    FreeBSD virtual terminal (`vt(4)`) scheme files are in the `freebsd_vt/` directory as `.conf` files.
+
+    1. Choose a scheme from the `freebsd_vt/` directory.
+    2. Append the contents of the `.conf` file to `/boot/loader.conf` or `/boot/loader.conf.local`:
+
+       ```bash
+       cat freebsd_vt/Dracula.conf >> /boot/loader.conf.local
+       ```
+
+    3. Reboot the system for the colors to take effect at the virtual console.
+  </Accordion>
+
+  <Accordion title="Remmina">
+    Remmina scheme files are in the `remmina/` directory as `.colors` files.
+
+    1. Copy the `.colors` file for your chosen scheme from `remmina/` to Remmina's color schemes directory. The directory is typically `~/.local/share/remmina/colors/`:
+
+       ```bash
+       mkdir -p ~/.local/share/remmina/colors/
+       cp remmina/Dracula.colors ~/.local/share/remmina/colors/
+       ```
+
+    2. Restart Remmina and select the color scheme in your connection profile settings.
+  </Accordion>
+
+  <Accordion title="Tilda">
+    Tilda scheme files are in the `tilda/` directory. Each file uses the `.itermcolors_config_0` extension.
+
+    1. Open the Tilda preferences dialog.
+    2. Navigate to the **Colors** tab.
+    3. Copy the color values from the scheme file in `tilda/` and apply them to the corresponding fields in the Tilda preferences.
+  </Accordion>
+
+  <Accordion title="Rio">
+    Rio terminal scheme files are in the `rio/` directory as `.toml` files.
+
+    1. Copy the `.toml` file for your chosen scheme from `rio/` to Rio's theme configuration directory, typically `~/.config/rio/themes/`:
+
+       ```bash
+       mkdir -p ~/.config/rio/themes/
+       cp rio/Dracula.toml ~/.config/rio/themes/
+       ```
+
+    2. In your Rio configuration file (`~/.config/rio/config.toml`), set the `theme` field to the scheme name (without the `.toml` extension):
+
+       ```toml
+       theme = "Dracula"
+       ```
+
+    3. Restart Rio to apply the theme.
+  </Accordion>
+
+  <Accordion title="WezTerm">
+    WezTerm scheme files are in the `wezterm/` directory as `.toml` files. Each file contains a `[colors]` table with foreground, background, cursor, selection, and ANSI palette entries in WezTerm's native TOML format.
+
+    1. Locate the `.toml` file for your chosen scheme in `wezterm/`.
+    2. Copy its contents and paste them into your WezTerm TOML configuration file (typically `~/.config/wezterm/wezterm.toml`).
+    3. Reload or restart WezTerm to apply the changes.
+  </Accordion>
+
+  <Accordion title="Wayst">
+    Wayst scheme files are in the `wayst/` directory. Each file is named after the scheme with no extension.
+
+    1. Copy the contents of the scheme file from `wayst/` for your chosen scheme.
+    2. Paste the color definitions into your Wayst configuration file, following Wayst's configuration format.
+    3. Restart Wayst to apply the new colors.
+  </Accordion>
+</AccordionGroup>

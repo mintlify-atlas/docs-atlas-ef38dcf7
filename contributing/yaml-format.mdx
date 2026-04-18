@@ -1,0 +1,83 @@
+---
+title: "YAML color scheme format used in the yaml/ directory"
+description: "Reference for the Gogh-compatible YAML format in yaml/: palette colors, core color roles, and iTerm2 extension fields such as badge, tab, and cursor_guide."
+---
+
+Color schemes in this project can be defined as YAML files in the `yaml/` directory. When a YAML file is present for a scheme, its values take precedence over those in the corresponding `.itermcolors` file in `schemes/`. The format is an extension of the YAML format used by the [Gogh](https://github.com/Gogh-Co/Gogh/) project, with several additional optional keys for iTerm2-specific color roles.
+
+## Field reference
+
+### Required fields
+
+| Field | Description |
+|---|---|
+| `name` | Display name of the scheme. |
+| `color_01` – `color_16` | The 16 ANSI palette colors in order: `color_01` = black, `color_02` = red, `color_03` = green, `color_04` = yellow, `color_05` = blue, `color_06` = magenta, `color_07` = cyan, `color_08` = white, `color_09` = bright black, `color_10` = bright red, `color_11` = bright green, `color_12` = bright yellow, `color_13` = bright blue, `color_14` = bright magenta, `color_15` = bright cyan, `color_16` = bright white. |
+| `foreground` | Default text (foreground) color. |
+| `background` | Terminal background color. |
+| `cursor` | Cursor fill color. |
+
+### Standard Gogh fields
+
+These fields are part of the shared Gogh format:
+
+| Field | Description |
+|---|---|
+| `selection` | Selection background color. Defaults to `foreground` if omitted. |
+| `selection_text` | Text color within a selection. Defaults to `background` if omitted. |
+| `cursor_text` | Text color under the cursor. Defaults to `foreground` if omitted. |
+| `bold` | Color used for bold text. Defaults to `foreground` if omitted. |
+
+### iTerm2 extension fields
+
+These fields are specific to this project's extension of the Gogh format:
+
+| Field | Default | Description |
+|---|---|---|
+| `badge` | — | Badge text color (the red badge displayed in the top-right of an iTerm2 pane). |
+| `cursor_guide` | `cursor` | Color of the cursor guide (the horizontal highlight line that follows the cursor). |
+| `link` | — | Color used for hyperlinks. |
+| `tab` | — | Color of the tab bar for this profile. |
+| `underline` | — | Color used for underlined text. |
+
+All color values are hex strings in `#rrggbb` format.
+
+## Example: Dracula
+
+The following is the actual `yaml/Dracula.yml` file from the repository:
+
+```yaml
+# Ported from https://github.com/dracula/kitty/blob/87717a3f00e3dff0fc10c93f5ff535ea4092de70/dracula.conf
+
+name: "Dracula"
+color_01: "#21222c"
+color_02: "#ff5555"
+color_03: "#50fa7b"
+color_04: "#f1fa8c"
+color_05: "#bd93f9"
+color_06: "#ff79c6"
+color_07: "#8be9fd"
+color_08: "#f8f8f2"
+color_09: "#6272a4"
+color_10: "#ff6e6e"
+color_11: "#69ff94"
+color_12: "#ffffa5"
+color_13: "#d6acff"
+color_14: "#ff92df"
+color_15: "#a4ffff"
+color_16: "#ffffff"
+cursor: "#f8f8f2"
+cursor_text: "#282a36"
+foreground: "#f8f8f2"
+background: "#282a36"
+selection: "#44475a"
+selection_text: "#ffffff"
+```
+
+## Override behavior
+
+If both a `yaml/<SchemeName>.yml` and a `schemes/<SchemeName>.itermcolors` file exist, the YAML file's values override those from the `.itermcolors` file. This makes YAML files the authoritative source when they are present, while still allowing `.itermcolors`-only themes to work without a YAML counterpart.
+
+## Relationship to Gogh
+
+The base format — `color_01` through `color_16`, `foreground`, `background`, `cursor`, `selection`, `selection_text`, `cursor_text`, and `bold` — is compatible with the YAML format used by the [Gogh](https://github.com/Gogh-Co/Gogh/) terminal color project. The fields listed under "iTerm2 extension fields" above (`badge`, `cursor_guide`, `link`, `tab`, `underline`) are additions specific to this repository and are not part of the Gogh specification.

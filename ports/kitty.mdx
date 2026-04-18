@@ -1,0 +1,91 @@
+---
+title: 'Apply iTerm2 Color Schemes to the kitty terminal emulator'
+description: 'Apply any of 485+ iTerm2 Color Schemes to kitty using .conf files via the include directive or by copying values directly into kitty.conf.'
+---
+
+kitty themes are stored in the `kitty/` directory of the repository, one `.conf` file per scheme. Each file sets all 16 color slots (`color0` through `color15`) plus background, foreground, cursor, and selection colors using kitty's plain key-value syntax. You can apply a scheme by using kitty's `include` directive to source the file from your main config, or by copying the key-value pairs directly into your `kitty.conf`.
+
+## File structure
+
+Each `.conf` file is a flat list of color assignments. Here is the complete content of `Monokai Classic.conf` as a representative example:
+
+```ini Monokai Classic.conf
+color0 #272822
+color1 #f92672
+color2 #a6e22e
+color3 #e6db74
+color4 #fd971f
+color5 #ae81ff
+color6 #66d9ef
+color7 #fdfff1
+color8 #6e7066
+color9 #f92672
+color10 #a6e22e
+color11 #e6db74
+color12 #fd971f
+color13 #ae81ff
+color14 #66d9ef
+color15 #fdfff1
+background #272822
+selection_foreground #272822
+cursor #c0c1b5
+cursor_text_color #8d8e82
+foreground #fdfff1
+selection_background #fdfff1
+```
+
+The keys map directly to kitty's color configuration:
+
+| Keys | Purpose |
+|---|---|
+| `color0`–`color7` | Normal ANSI colors 0–7 |
+| `color8`–`color15` | Bright ANSI colors 8–15 |
+| `background` / `foreground` | Terminal background and foreground |
+| `cursor` / `cursor_text_color` | Cursor fill and text |
+| `selection_background` / `selection_foreground` | Selection highlight colors |
+
+<Note>
+  `cursor_text_color` is only emitted when the source YAML provides a `Cursor_Text_Color` value. If the key is absent from a `.conf` file, kitty will use its default cursor text color.
+</Note>
+
+## Installation
+
+<Steps>
+  <Step title="Clone or download the repository">
+    ```bash
+    git clone https://github.com/mbadolato/iTerm2-Color-Schemes.git
+    ```
+  </Step>
+  <Step title="Copy the theme file to a convenient location">
+    ```bash
+    mkdir -p ~/.config/kitty/themes
+    cp iTerm2-Color-Schemes/kitty/"Monokai Classic.conf" ~/.config/kitty/themes/
+    ```
+  </Step>
+  <Step title="Include the theme in your kitty config">
+    Add an `include` directive to `~/.config/kitty/kitty.conf`:
+
+    ```ini ~/.config/kitty/kitty.conf
+    include themes/Monokai Classic.conf
+    ```
+
+    Alternatively, paste the contents of the `.conf` file directly into your `kitty.conf`. Later declarations override earlier ones, so place the color lines after any existing color settings.
+  </Step>
+  <Step title="Reload kitty">
+    Press `Ctrl+Shift+F5` to reload the config without restarting kitty, or open a new window to apply the theme.
+  </Step>
+</Steps>
+
+## Converting a kitty theme to YAML
+
+If you have a kitty `.conf` file from another source and want to contribute it to the project, use `tools/kitty_to_yaml.py` to produce the intermediate YAML format that the generation pipeline expects.
+
+```bash
+python3 tools/kitty_to_yaml.py < my-theme.conf > yaml/MyTheme.yml
+```
+
+The script reads the `.conf` from `stdin` and writes a sorted YAML fragment to `stdout`. It maps kitty color keys to the project's YAML field names (for example, `color0` becomes `color_01`, `selection_foreground` becomes `selection_text`). Any key it does not recognise is reported on `stderr` and skipped. Once the YAML file is in place, run the generation tool to produce all other formats:
+
+```bash
+python3 tools/gen.py -s MyTheme
+```

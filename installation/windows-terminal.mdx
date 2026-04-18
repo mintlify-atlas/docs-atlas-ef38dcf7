@@ -1,0 +1,90 @@
+---
+title: 'Apply iTerm2 Color Schemes to Microsoft Windows Terminal'
+description: 'Paste JSON fragments from the windowsterminal/ directory into Windows Terminal settings.json to apply any of 485+ color schemes to your profiles.'
+---
+
+Windows Terminal stores color schemes as JSON objects inside its `profiles.json` (or `settings.json`) configuration file. The `windowsterminal/` directory in this repository contains one JSON file per scheme. Each file is a single self-contained JSON object that you paste directly into the `"schemes"` array of your Windows Terminal settings.
+
+Each scheme file follows this structure:
+
+```json
+{
+  "name": "Dracula",
+  "black": "#21222c",
+  "red": "#ff5555",
+  "green": "#50fa7b",
+  "yellow": "#f1fa8c",
+  "blue": "#bd93f9",
+  "purple": "#ff79c6",
+  "cyan": "#8be9fd",
+  "white": "#f8f8f2",
+  "brightBlack": "#6272a4",
+  "brightRed": "#ff6e6e",
+  "brightGreen": "#69ff94",
+  "brightYellow": "#ffffa5",
+  "brightBlue": "#d6acff",
+  "brightPurple": "#ff92df",
+  "brightCyan": "#a4ffff",
+  "brightWhite": "#ffffff",
+  "background": "#282a36",
+  "foreground": "#f8f8f2",
+  "cursorColor": "#f8f8f2",
+  "selectionBackground": "#44475a"
+}
+```
+
+<Steps>
+  <Step title="Open the scheme file you want">
+    Locate the scheme in the `windowsterminal/` directory of the repository. Open the corresponding `.json` file in any text editor and copy its entire contents.
+  </Step>
+
+  <Step title="Open Windows Terminal settings">
+    In Windows Terminal, click the dropdown arrow next to the new tab button and select **Settings**, or press **Ctrl+,**. This opens `settings.json` in your default editor.
+  </Step>
+
+  <Step title="Add the scheme to the schemes array">
+    Find the `"schemes"` array in `settings.json`. If no `"schemes"` key exists, add one. Paste the copied JSON object into the array:
+
+    ```json
+    {
+      "schemes": [
+        {
+          "name": "Dracula",
+          "black": "#21222c",
+          "red": "#ff5555",
+          ...
+        }
+      ]
+    }
+    ```
+
+    <Warning>
+      Make sure commas between array entries are correct. Invalid JSON will prevent Windows Terminal from loading its settings.
+    </Warning>
+  </Step>
+
+  <Step title="Assign the scheme to a profile">
+    In `settings.json`, find the profile you want to style inside the `"profiles"` → `"list"` array. Add a `"colorScheme"` entry with the name that matches the `"name"` field in the scheme object:
+
+    ```json
+    {
+      "profiles": {
+        "list": [
+          {
+            "name": "PowerShell",
+            "colorScheme": "Dracula"
+          }
+        ]
+      }
+    }
+    ```
+  </Step>
+
+  <Step title="Save and apply">
+    Save `settings.json`. Windows Terminal applies the change immediately — no restart is required.
+  </Step>
+</Steps>
+
+<Tip>
+  To install many schemes at once, concatenate multiple JSON objects into the `"schemes"` array in a single editing session rather than opening `settings.json` repeatedly.
+</Tip>
